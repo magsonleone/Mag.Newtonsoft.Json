@@ -16,7 +16,7 @@
     <Summary>Json.NET is a popular high-performance JSON framework for .NET</Summary>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Title>Json.NET</Title>
-    <PackageId>Newtonsoft.Json</PackageId>
+    <PackageId>Mag.Newtonsoft.Json</PackageId>
     <PackageTags>json</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>packageIcon.png</PackageIcon>
@@ -25,7 +25,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl> 
     <RootNamespace>Newtonsoft.Json</RootNamespace>
-    <AssemblyName>Newtonsoft.Json</AssemblyName>
+    <AssemblyName>Mag.Newtonsoft.Json.$(VersionPrefix)</AssemblyName>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
     <MinClientVersion>2.12</MinClientVersion>
@@ -34,7 +34,7 @@
     <CodeAnalysisRuleset>Newtonsoft.Json.ruleset</CodeAnalysisRuleset>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!--Package Validation-->
-    <EnablePackageValidation>true</EnablePackageValidation>
+    <EnablePackageValidation>false</EnablePackageValidation>
     <PackageValidationBaselineVersion>13.0.1</PackageValidationBaselineVersion>
     <!--CP0003 will be logged when the assembly identity between baseline package and current don't match.
     Disable that warning since local builds do not strong-name sign the assembly, causing a mistmatch when comparing
