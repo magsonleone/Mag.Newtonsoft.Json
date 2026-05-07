@@ -36,10 +36,10 @@ jobs:
           $msbuild = Join-Path $vsPath "MSBuild\Current\Bin\MSBuild.exe"
           $project = ".\Src\Newtonsoft.Json\Newtonsoft.Json.csproj"
 
-          & $msbuild "/t:restore" "/v:minimal" "/p:Configuration=Release" "/p:LibraryFrameworks=$libraryFrameworks" "/m" $project
+          & $msbuild "/t:restore" "/v:minimal" "/p:Configuration=Release" "/p:LibraryFrameworks=`"$libraryFrameworks`"" "/m" $project
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          & $msbuild "/t:build" "/v:minimal" "/p:Configuration=Release" "/p:LibraryFrameworks=$libraryFrameworks" "/p:SignAssembly=false" "/p:GeneratePackageOnBuild=true" "/p:ContinuousIntegrationBuild=true" "/p:PackageId=Mag.Newtonsoft.Json" "/p:AssemblyName=$assemblyName" "/p:VersionPrefix=$packageVersion" "/p:VersionSuffix=$($version.Prerelease)" "/p:AssemblyVersion=$assemblyVersion" "/p:FileVersion=$packageVersion" "/m" $project
+          & $msbuild "/t:build" "/v:minimal" "/p:Configuration=Release" "/p:LibraryFrameworks=`"$libraryFrameworks`"" "/p:SignAssembly=false" "/p:GeneratePackageOnBuild=true" "/p:ContinuousIntegrationBuild=true" "/p:PackageId=Mag.Newtonsoft.Json" "/p:AssemblyName=$assemblyName" "/p:VersionPrefix=$packageVersion" "/p:VersionSuffix=$($version.Prerelease)" "/p:AssemblyVersion=$assemblyVersion" "/p:FileVersion=$packageVersion" "/m" $project
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Configure GitHub Packages source
