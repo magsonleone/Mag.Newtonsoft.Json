@@ -18,6 +18,16 @@ Mag.Newtonsoft.Json.13.0.4.dll
 
 Use this package when you need a version-specific assembly identity. For regular .NET applications without assembly binding conflicts, use the official Newtonsoft.Json package.
 
+## Install
+
+Mag.Newtonsoft.Json is published publicly on NuGet.org:
+
+```powershell
+dotnet add package Mag.Newtonsoft.Json --version 13.0.4
+```
+
+The previous GitHub Packages publication was removed. Consumers should use NuGet.org unless they are building a private package from this repository.
+
 ## Serialize JSON
 
 ```csharp
@@ -77,6 +87,7 @@ string json = o.ToString();
 
 - [Homepage](https://www.newtonsoft.com/json)
 - [Documentation](https://www.newtonsoft.com/json/help)
+- [Mag.Newtonsoft.Json NuGet Package](https://www.nuget.org/packages/Mag.Newtonsoft.Json)
 - [Official NuGet Package](https://www.nuget.org/packages/Newtonsoft.Json)
 - [Release Notes](https://github.com/JamesNK/Newtonsoft.Json/releases)
 - [Contributing Guidelines](https://github.com/JamesNK/Newtonsoft.Json/blob/master/CONTRIBUTING.md)
