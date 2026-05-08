@@ -34,12 +34,12 @@ Use this fork when you need a version-specific assembly name to avoid runtime co
 
 For normal .NET applications, web applications, services, and libraries that do not have assembly binding conflicts, prefer the official Newtonsoft.Json package from NuGet.org.
 
-## Package Feed
+## Install
 
-This package is published to GitHub Packages:
+This package is published publicly on NuGet.org:
 
-```text
-https://nuget.pkg.github.com/magsonleone/index.json
+```powershell
+dotnet add package Mag.Newtonsoft.Json --version 13.0.4
 ```
 
 Package id:
@@ -47,6 +47,8 @@ Package id:
 ```text
 Mag.Newtonsoft.Json
 ```
+
+The previous GitHub Packages publication was removed. Consumers should use NuGet.org unless they are building a private package from this repository.
 
 ## Upstream Project
 
