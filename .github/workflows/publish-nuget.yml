@@ -1,0 +1,58 @@
+name: Publish NuGet Package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build package
+        shell: powershell
+        run: |
+          $version = Get-Content ".\Build\version.json" | Out-String | ConvertFrom-Json
+          $packageVersion = "$($version.Major).0.$($version.Release)"
+          $assemblyName = "Mag.Newtonsoft.Json.$packageVersion"
+          $libraryFrameworks = "net6.0;netstandard2.0;netstandard1.3;netstandard1.0;net45;net40;net35;net20"
+          $assemblyVersion = "$($version.Major).0.0.0"
+
+          New-Item -Path ".\Build\Temp" -ItemType Directory -Force | Out-Null
+          Invoke-WebRequest -Uri "https://dot.net/v1/dotnet-install.ps1" -OutFile ".\Build\Temp\dotnet-install.ps1"
+          & ".\Build\Temp\dotnet-install.ps1" -Channel STS -Version "9.0.300"
+          & ".\Build\Temp\dotnet-install.ps1" -Channel STS -Version "6.0.400"
+          & ".\Build\Temp\dotnet-install.ps1" -Channel STS -Version "3.1.402"
+          & ".\Build\Temp\dotnet-install.ps1" -Channel STS -Version "2.1.818"
+
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vsPath = & $vswhere -latest -prerelease -products * -requires Microsoft.Component.MSBuild -property installationPath
+          $msbuild = Join-Path $vsPath "MSBuild\Current\Bin\MSBuild.exe"
+          $project = ".\Src\Newtonsoft.Json\Newtonsoft.Json.csproj"
+
+          & $msbuild "/t:restore" "/v:minimal" "/p:Configuration=Release" "/p:LibraryFrameworks=`"$libraryFrameworks`"" "/m" $project
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          & $msbuild "/t:build" "/v:minimal" "/p:Configuration=Release" "/p:LibraryFrameworks=`"$libraryFrameworks`"" "/p:SignAssembly=false" "/p:GeneratePackageOnBuild=true" "/p:ContinuousIntegrationBuild=true" "/p:PackageId=Mag.Newtonsoft.Json" "/p:AssemblyName=$assemblyName" "/p:VersionPrefix=$packageVersion" "/p:VersionSuffix=$($version.Prerelease)" "/p:AssemblyVersion=$assemblyVersion" "/p:FileVersion=$packageVersion" "/m" $project
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Publish package to NuGet.org
+        shell: powershell
+        run: |
+          $packages = Get-ChildItem -Path .\Src\Newtonsoft.Json\bin\Release -Filter *.nupkg | Where-Object { $_.Name -notlike "*.symbols.nupkg" }
+          if ($packages.Count -eq 0) {
+            throw "No NuGet packages were produced."
+          }
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName --source "https://api.nuget.org/v3/index.json" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
+          }
+
+          $symbolPackages = Get-ChildItem -Path .\Src\Newtonsoft.Json\bin\Release -Filter *.snupkg
+          foreach ($package in $symbolPackages) {
+            dotnet nuget push $package.FullName --source "https://api.nuget.org/v3/index.json" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
+          }
