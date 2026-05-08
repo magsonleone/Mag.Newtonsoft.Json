@@ -1,9 +1,22 @@
-# ![Logo](https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/master/Doc/icons/logo.jpg) Json.NET
+# Mag.Newtonsoft.Json
 
-[![NuGet version (Newtonsoft.Json)](https://img.shields.io/nuget/v/Newtonsoft.Json.svg?style=flat-square)](https://www.nuget.org/packages/Newtonsoft.Json/)
-[![Build status](https://dev.azure.com/jamesnk/Public/_apis/build/status/JamesNK.Newtonsoft.Json?branchName=master)](https://dev.azure.com/jamesnk/Public/_build/latest?definitionId=8)
+Mag.Newtonsoft.Json is a fork of Newtonsoft.Json intended for side-by-side loading scenarios where the official `Newtonsoft.Json.dll` name can cause assembly conflicts.
 
-Json.NET is a popular high-performance JSON framework for .NET
+The primary target scenario is plugin-based hosts such as Autodesk Revit. In those environments, several add-ins can run inside the same process and may require different Newtonsoft.Json versions. This package avoids that DLL Hell scenario by changing only the assembly name.
+
+Namespaces are not renamed. Consumer code still uses:
+
+```csharp
+using Newtonsoft.Json;
+```
+
+The assembly name includes the package version. For version `13.0.4`, the generated assembly is:
+
+```text
+Mag.Newtonsoft.Json.13.0.4.dll
+```
+
+Use this package when you need a version-specific assembly identity. For regular .NET applications without assembly binding conflicts, use the official Newtonsoft.Json package.
 
 ## Serialize JSON
 
@@ -64,7 +77,7 @@ string json = o.ToString();
 
 - [Homepage](https://www.newtonsoft.com/json)
 - [Documentation](https://www.newtonsoft.com/json/help)
-- [NuGet Package](https://www.nuget.org/packages/Newtonsoft.Json)
+- [Official NuGet Package](https://www.nuget.org/packages/Newtonsoft.Json)
 - [Release Notes](https://github.com/JamesNK/Newtonsoft.Json/releases)
 - [Contributing Guidelines](https://github.com/JamesNK/Newtonsoft.Json/blob/master/CONTRIBUTING.md)
 - [License](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md)
